@@ -32,4 +32,8 @@ public class F {
 	    } while (p > L);
 	    return k - 1;
 	}
+	
+	public static double getExponetialRandom(Random r,double rate) {
+	    return - Math.log(r.nextDouble()) / rate;
+	}
 }
