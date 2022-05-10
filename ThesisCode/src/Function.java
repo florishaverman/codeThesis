@@ -1,9 +1,13 @@
 class Function{ 
 		
-	public static double secondPart(double L, double T, int rate1, int rate2, int S, int Sc, double x) {
+	public static double secondPart(double L, double T, int rate1, int rate2, int S, int Sc, double x, boolean case1) {
 		double secondPart = 0;
 		for (int i = 0; i < Sc; i++) {
-			secondPart += F.pdfPoission(i, rate1 * (L - x));
+			if (case1) {
+				secondPart += F.pdfPoission(i, rate1 * (L - x));
+			}else {
+				secondPart += F.pdfPoission(i, rate2 * (L - x));
+			}
 		}
 		
 		return  secondPart;
@@ -19,31 +23,31 @@ class Function{
 	
 	
 	
-	public static double firstIntergralFunction(double L, double T, int rate1, int rate2, int S, int Sc, double x) {
+	public static double firstIntergralFunction(double L, double T, int rate1, int rate2, int S, int Sc, double x, boolean case1) {
 		double firstPart = functionf1(L, T, rate1, rate2, S, Sc, x) ;
-		double secondPart = secondPart(L, T, rate1, rate2, S, Sc, x);
+		double secondPart = secondPart(L, T, rate1, rate2, S, Sc, x, case1);
 		
 		return firstPart  * secondPart;
 	}
 	
-	public static double secondIntergralFunction(double L, double T, int rate1, int rate2, int S, int Sc, double x) {
+	public static double secondIntergralFunction(double L, double T, int rate1, int rate2, int S, int Sc, double x, boolean case1) {
 		double firstPart = functionf2(L, T, rate1, rate2, S, Sc, x) ;
-		double secondPart = secondPart(L, T, rate1, rate2, S, Sc, x);
+		double secondPart = secondPart(L, T, rate1, rate2, S, Sc, x, case1);
 		
 		return firstPart  * secondPart;
 	}
 	
-	public static double IntSimpson(double L, double T, int rate1, int rate2, int S, int Sc,double a, double b,int n, boolean firstInt){                       
+	public static double IntSimpson(double L, double T, int rate1, int rate2, int S, int Sc,double a, double b,int n, boolean firstInt, boolean case1){                       
 	       int i,z;                                                       
 	       double h,s;                                                    
 
 	       n=n+n;
 	       if (firstInt) {
-	    	   s= firstIntergralFunction(L, T, rate1, rate2, S, Sc, a) *
-		    		   firstIntergralFunction(L, T, rate1, rate2, S, Sc, b);
+	    	   s= firstIntergralFunction(L, T, rate1, rate2, S, Sc, a, case1) *
+		    		   firstIntergralFunction(L, T, rate1, rate2, S, Sc, b, case1);
 	       }else {
-	    	   s= secondIntergralFunction(L, T, rate1, rate2, S, Sc, a) *
-		    		   secondIntergralFunction(L, T, rate1, rate2, S, Sc, b);
+	    	   s= secondIntergralFunction(L, T, rate1, rate2, S, Sc, a, case1) *
+		    		   secondIntergralFunction(L, T, rate1, rate2, S, Sc, b, case1);
 	       }
 	       
 	       h = (b-a)/n;                                        
@@ -51,10 +55,10 @@ class Function{
 
 	       for(i = 1; i<n; i++){
 	    	   if (firstInt) {
-	 	          s = s + z * firstIntergralFunction(L, T, rate1, rate2, S, Sc, a+i*h);
+	 	          s = s + z * firstIntergralFunction(L, T, rate1, rate2, S, Sc, a+i*h, case1);
 
 		       }else {
-			          s = s + z * secondIntergralFunction(L, T, rate1, rate2, S, Sc, a+i*h);
+			          s = s + z * secondIntergralFunction(L, T, rate1, rate2, S, Sc, a+i*h, case1);
 
 		      }
 	          z = 6 - z;

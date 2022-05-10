@@ -12,18 +12,20 @@ public class ServiceLevel {
 		double L = 0.5;
 		
 		//Rate class 1 and class 2
-		int rate1= 8;
+		int rate1= 9;
 		int rate2= 4;
 		
 		// Base stock level
-		int S =12;
+		int S =rate1+4;
 		
 		// Critical level
 		int Sc = 3;
 		
 		System.out.println("Hello world");
 		
+		boolean case1 = false;
 		
+
 
 		
 //		System.out.println("The service level is");
@@ -38,9 +40,24 @@ public class ServiceLevel {
 			//System.out.println(F.getExponetialRandom(r, 4));
 		}
 		
-		ServiceLevel.getSimServiceLevelCritical(L, T, rate1, rate2, S, Sc, r);
+//		ServiceLevel.getSimServiceLevelCritical(L, T, rate1, rate2, S, Sc, r);
+//		System.out.println( F.round(ServiceLevel.getSimServiceLevelCritical(L, T, rate1, rate2, S, Sc, r, case1),4));
 		
+		int ratec = 4;
+		int raten = 1;
 		
+		S = 5;
+		Sc = 2;
+		rate1 = 2;
+		rate2 = 2; 
+//		L = 1;
+//		T= 0.5;
+		System.out.println(F.round(ServiceLevel.getServiceLevelNonCritical(L, T, rate2, rate1, S, Sc),4));
+		System.out.println(F.round(ServiceLevel.getAproxServiceLevelCritical(L, T, ratec, raten, S, Sc, case1),4));
+		System.out.println(F.round(ServiceLevel.getAproxServiceLevelCritical(L, T, raten, ratec, S, Sc, case1),4));
+		System.out.println( F.round(ServiceLevel.getSimServiceLevelCritical(L, T, rate2, rate1, S, Sc, r, case1),4));
+		
+		Table.createLine(L, T, ratec, raten, S, Sc, r, case1);
 		/*
 		System.out.println();
 		System.out.println("Start of the list");
@@ -72,7 +89,7 @@ public class ServiceLevel {
 	}
 	
 	
-	public static double getAproxServiceLevelCritical(double L, double T, int rate1, int rate2, int S, int Sc) {
+	public static double getAproxServiceLevelCritical(double L, double T, int rate1, int rate2, int S, int Sc, boolean case1) {
 		//Parameters
 		//n is the number of partitions
 		int n = 10000;
@@ -84,11 +101,11 @@ public class ServiceLevel {
 			serviceLevel += F.pdfPoission(i, (rate1 * L + rate2 * (L - T)));
 		}
 		
-		return serviceLevel + Function.IntSimpson(L, T, rate1, rate2, S, Sc, 0, (L - T), n, true) 
-					+ Function.IntSimpson(L, T, rate1, rate2, S, Sc, (L - T), L,  n, false);
+		return serviceLevel + Function.IntSimpson(L, T, rate1, rate2, S, Sc, 0, (L - T), n, true, case1) 
+					+ Function.IntSimpson(L, T, rate1, rate2, S, Sc, (L - T), L,  n, false, case1);
 	}
 	
-	public static double getSimServiceLevelCritical(double L, double T, int rate1, int rate2, int S, int Sc, Random r) {
+	public static double getSimServiceLevelCritical(double L, double T, int rate1, int rate2, int S, int Sc, Random r, boolean case1) {
 		
 		/*
 		 * The different events all have a number
@@ -102,7 +119,7 @@ public class ServiceLevel {
 		
 		TreeMap<Double, Integer> events = new TreeMap<>();
 		//Simulate T time units.
-		int timeHorizon = 100000;
+		double timeHorizon = 1E+5;
 		
 		//Initilization
 		int criticalBackorders= 0;
@@ -134,30 +151,54 @@ public class ServiceLevel {
 			Entry<Double, Integer> event = events.pollFirstEntry();
 			t = event.getKey();
 			switch(event.getValue()) {
-				case 1: //critical order arrival
-					totCritical++;
-					if (stock == 0) {
-						criticalBackorders ++;
+				case 1: // order  without DLT arrives
+					if (case1) {
+						totCritical++;
+						if (stock == 0) {
+							criticalBackorders ++;
+						}else {
+							filledCritical++;
+							stock--;
+						}
+						
 					}else {
-						filledCritical++;
-						stock--;
+						totNonCritical++;
+						if (stock <= Sc) {
+							nonCriticalBackorders ++;
+						}else {
+							filledNonCritical++;
+							stock--;
+						}
 					}
 					events.put(t + F.getExponetialRandom(r, rate1), 1);
 					events.put(t + L, 4);
+
 					break;
-				case 2: //non critical order arrival
+				case 2: //Order with DLT arrives
+					
+					events.put(t + T, 3);
 					events.put(t + F.getExponetialRandom(r, rate2), 2);
 					events.put(t + L, 4);
-					events.put(t + T, 3);
 					break;
-				case 3: //non critical order is due
-					totNonCritical++;
-					if (stock > Sc) {
-						filledNonCritical++;
-						stock--;
+				case 3: //Order with DLT needs to be filled
+					if (case1) {
+						totNonCritical++;
+						if (stock > Sc) {
+							filledNonCritical++;
+							stock--;
+						}else {
+							nonCriticalBackorders++;
+						}
 					}else {
-						nonCriticalBackorders++;
+						totCritical++;
+						if (stock > 0) {
+							filledCritical++;
+							stock--;
+						}else {
+							criticalBackorders++;
+						}
 					}
+					
 					break;
 				case 4: //arrival of replenishment 
 					if (criticalBackorders  > 0) {
