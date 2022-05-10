@@ -261,6 +261,7 @@ public static double[] getSimServiceLevelCritical(double L, double T, double rat
 		
 		
 		TreeMap<Double, Integer> events = new TreeMap<>();
+		if (L - T < 0.0005) T +=0.01;
 		//Simulate T time units.
 		double timeHorizon = 1E+5;
 		

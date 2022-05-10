@@ -5,26 +5,26 @@ public class Table {
 	public static void main(String[] args) {
 		long startTime, endTime;
 		startTime = System.currentTimeMillis();
-
-//		createTable1();
 		
+//		createTable1();
+
 //		createTable2();
 		
 //		createTable3();
 		
 //		Table.createTable4(true);
-//		Table.createTable5(true); //Takes a long time to run
 		
-//		createTable6(true); //TODO: Infinite loop.
+
+//		Table.createTable5(true); 
+		
+
+//		createTable6(true);
+		
 //		createTable7(true);
+		
 //		createTable8(true);
-
-//		Table.createLin678(0.5, 0.5, 20, 20, 0.99, 0.8, new Random(1234), true, true);
-//		double[]  slSim = Simulation.runSimulationBrute(0.5, 0.5, 20, 20, 0.99, 0.8, new Random(1234), true, true);
-//		double  slNoRat= Simulation.getOptimalForNoRat(0.5, 0.40, 20, 20, 0.99, 0.8, new Random(1234), true)[0];
-
 		
-		
+//		Table.createAllTables();
 
 
 		 endTime = System.currentTimeMillis();
@@ -318,7 +318,7 @@ public class Table {
 		System.out.print(slSim + " , ");
 		System.out.print(slAprox + " , ");
 		System.out.print(F.round( 100 * (slSim - slAprox)/ slSim, 2));
-		System.out.print(" ; ");
+		System.out.print("  ");
 		case1 = false;
 		slSim = F.round(ServiceLevel.getSimServiceLevelCritical(L, T, rate2, rate1, S, Sc, r, case1),4);
 		slAprox = F.round(ServiceLevel.getAproxServiceLevelCritical(L, T, rate2, rate1, S, Sc, case1),4);
@@ -326,5 +326,74 @@ public class Table {
 		System.out.print(slSim + " , ");
 		System.out.print(slAprox + " , ");
 		System.out.println(F.round( 100 * (slSim - slAprox)/ slSim, 2));
+	}
+	
+	public static void createAllTables() {
+		long startTime, endTime;
+		startTime = System.currentTimeMillis();
+		
+		createTable1();
+		
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+
+		
+		createTable2();
+		
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+		createTable3();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+		Table.createTable4(true);
+		
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+		Table.createTable5(true); 
+		
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+		createTable6(true);
+		
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		createTable7(true);
+		
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+		createTable8(true);
+		
+
+
+
+		 endTime = System.currentTimeMillis();
+
+		System.out.println("That took " + (endTime - startTime) + " milliseconds");
 	}
 }

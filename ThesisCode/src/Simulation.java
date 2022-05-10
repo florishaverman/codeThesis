@@ -91,10 +91,13 @@ public class Simulation {
 	
 	public static double[] runSimulationBrute(double L, double T, double rate1, double rate2, double Bc, double Bn, Random r, boolean case1, boolean minimiseSc) {
 		int Smin = Simulation.getSmin(L, T, rate1, rate2, Bc, Bn);
-		for (int i= Smin; i < 50; i++) {
+		for (int i= Smin; i < 100; i++) {
 			if (minimiseSc) {
 				for (int j = 0; j <= i - Smin ; j++) {
+//					System.out.println("start simulation");
 					double[]  sl = ServiceLevel.getSimServiceLevelCritical(L, T, rate1, rate2, i, j, r, case1, true);
+//					System.out.println("end simulation with i " + i + " and j "+ j);
+
 //					System.out.println("Sl for crit "+ sl[0] + " sl for non crit "+ sl[1] + "with S "+ i + " and Sc "+ j);
 					if (sl[0] >= Bc && sl[1] >= Bn) {
 						return new double [] {i,j};
