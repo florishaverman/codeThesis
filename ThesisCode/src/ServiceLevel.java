@@ -93,7 +93,7 @@ public class ServiceLevel {
 		
 	}
 	
-	public static double getServiceLevelNonCritical(double L, double T, int rate1, int rate2, int S, int Sc) {
+	public static double getServiceLevelNonCritical(double L, double T, double rate1, double rate2, int S, int Sc) {
 		double serviceLevel = 0;
 		
 		for (int i = 0; i < S - Sc; i++) {
@@ -109,7 +109,7 @@ public class ServiceLevel {
 	}
 	
 	
-	public static double getAproxServiceLevelCritical(double L, double T, int rate1, int rate2, int S, int Sc, boolean case1) {
+	public static double getAproxServiceLevelCritical(double L, double T, double rate1, double rate2, int S, int Sc, boolean case1) {
 		//Parameters
 		//n is the number of partitions
 		int n = 1000; //TODO: increase to higher number
@@ -131,7 +131,7 @@ public class ServiceLevel {
 					+ parttwo;
 	}
 	
-	public static double getSimServiceLevelCritical(double L, double T, int rate1, int rate2, int S, int Sc, Random r, boolean case1) {
+	public static double getSimServiceLevelCritical(double L, double T, double rate1, double rate2, int S, int Sc, Random r, boolean case1) {
 		
 		/*
 		 * The different events all have a number
@@ -248,7 +248,7 @@ public class ServiceLevel {
 		return F.round((double) filledCritical/totCritical, 4);
 	}
 	
-public static double[] getSimServiceLevelCritical(double L, double T, int rate1, int rate2, int S, int Sc, Random r, boolean case1, boolean printBoth) {
+public static double[] getSimServiceLevelCritical(double L, double T, double rate1, double rate2, int S, int Sc, Random r, boolean case1, boolean printBoth) {
 		
 		/*
 		 * The different events all have a number
@@ -263,6 +263,10 @@ public static double[] getSimServiceLevelCritical(double L, double T, int rate1,
 		TreeMap<Double, Integer> events = new TreeMap<>();
 		//Simulate T time units.
 		double timeHorizon = 1E+5;
+		
+		if(rate1 > 10 && rate2 > 10 ) {
+			timeHorizon = 1E+4;
+		}
 		
 		//Initilization
 		int criticalBackorders= 0;

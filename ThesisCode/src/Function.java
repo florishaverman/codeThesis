@@ -3,7 +3,7 @@ import java.math.MathContext;
 
 class Function{ 
 		
-	public static double secondPart(double L, double T, int rate1, int rate2, int S, int Sc, double x, boolean case1) {
+	public static double secondPart(double L, double T, double rate1, double rate2, int S, int Sc, double x, boolean case1) {
 		double secondPart = 0;
 		
 		for (int i = 0; i < Sc; i++) {
@@ -20,7 +20,7 @@ class Function{
 		return  secondPart;
 	}
 	
-	public static double functionf1(double L, double T, int rate1, int rate2, int S, int Sc, double x) {
+	public static double functionf1(double L, double T, double rate1, double rate2, int S, int Sc, double x) {
 		BigDecimal one = new BigDecimal(Math.pow((rate1 + rate2), S - Sc) * Math.exp(- (rate1 + rate2)* x) * Math.pow(x, S - Sc - 1));
 		
 		return  one.divide(new BigDecimal(F.factorial2(S - Sc - 1)), new MathContext(10)).doubleValue();
@@ -28,7 +28,7 @@ class Function{
 //		return  Math.pow((rate1 + rate2), S - Sc) * Math.exp(- (rate1 + rate2)* x) * Math.pow(x, S - Sc - 1) / F.factorial(S - Sc - 1);
 	}
 	
-	public static double functionf2(double L, double T, int rate1, int rate2, int S, int Sc, double x) {
+	public static double functionf2(double L, double T, double rate1, double rate2, int S, int Sc, double x) {
 		BigDecimal one = new BigDecimal(rate1 * Math.exp(- (rate1 * x+ rate2 *  (L - T) )) * Math.pow(rate1 * x + rate2 * (L- T), S - Sc - 1));
 		
 		return  one.divide(new BigDecimal(F.factorial2(S - Sc - 1)), new MathContext(10)).doubleValue();
@@ -37,7 +37,7 @@ class Function{
 	
 	
 	
-	public static double firstIntergralFunction(double L, double T, int rate1, int rate2, int S, int Sc, double x, boolean case1) {
+	public static double firstIntergralFunction(double L, double T, double rate1, double rate2, int S, int Sc, double x, boolean case1) {
 		double firstPart = functionf1(L, T, rate1, rate2, S, Sc, x) ;
 		double secondPart = secondPart(L, T, rate1, rate2, S, Sc, x, case1);
 		
@@ -45,14 +45,14 @@ class Function{
 		return firstPart  * secondPart;
 	}
 	
-	public static double secondIntergralFunction(double L, double T, int rate1, int rate2, int S, int Sc, double x, boolean case1) {
+	public static double secondIntergralFunction(double L, double T, double rate1, double rate2, int S, int Sc, double x, boolean case1) {
 		double firstPart = functionf2(L, T, rate1, rate2, S, Sc, x) ;
 		double secondPart = secondPart(L, T, rate1, rate2, S, Sc, x, case1);
 		
 		return firstPart  * secondPart;
 	}
 	
-	public static double IntSimpson(double L, double T, int rate1, int rate2, int S, int Sc,double a, double b,int n, boolean firstInt, boolean case1){                       
+	public static double IntSimpson(double L, double T, double rate1, double rate2, int S, int Sc,double a, double b,int n, boolean firstInt, boolean case1){                       
 	       int i,z;                                                       
 	       double h,s;                                                    
 
@@ -85,7 +85,7 @@ class Function{
 	       return (s * h)/3;
 	 } 
 	
-	public static double IntSimpson2(double L, double T, int rate1, int rate2, int S, int Sc,double a, double b,int n, boolean firstInt, boolean case1){                       
+	public static double IntSimpson2(double L, double T, int rate1, double rate2, int S, int Sc,double a, double b,int n, boolean firstInt, boolean case1){                       
 	       int i,z;                                                       
 	       double h,s;                                                    
 

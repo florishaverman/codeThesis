@@ -89,7 +89,7 @@ public class Simulation {
 		
 	}
 	
-	public static double[] runSimulationBrute(double L, double T, int rate1, int rate2, double Bc, double Bn, Random r, boolean case1, boolean minimiseSc) {
+	public static double[] runSimulationBrute(double L, double T, double rate1, double rate2, double Bc, double Bn, Random r, boolean case1, boolean minimiseSc) {
 		int Smin = Simulation.getSmin(L, T, rate1, rate2, Bc, Bn);
 		for (int i= Smin; i < 50; i++) {
 			if (minimiseSc) {
@@ -114,7 +114,7 @@ public class Simulation {
 		return null;
 	}
 	
-	public static double[] getOptimalForAprox(double L, double T, int rate1, int rate2, double Bc, double Bn, Random r, boolean case1, boolean minimiseSc) {
+	public static double[] getOptimalForAprox(double L, double T, double rate1, double rate2, double Bc, double Bn, Random r, boolean case1, boolean minimiseSc) {
 		int Smin = Simulation.getSmin(L, T, rate1, rate2, Bc, Bn);
 		
 		for (int i= Smin; i < 50; i++) {
@@ -145,15 +145,18 @@ public class Simulation {
 		return null;
 	}
 	
-public static double[] getOptimalForNoRat(double L, double T, int rate1, int rate2, double Bc, double Bn, Random r, boolean case1) {
+public static double[] getOptimalForNoRat(double L, double T, double rate1, double rate2, double Bc, double Bn, Random r, boolean case1) {
 		
-		for (int i= Simulation.getSmin(L, T, rate1, rate2, Bc, Bn); i < 50; i++) {
-			double[] sl =  ServiceLevel.getSimServiceLevelCritical(L, T, rate1, rate2, i, 0, r, case1, true);
+		for (int i= Simulation.getSmin(L, T, rate1, rate2, Bc, Bn); i < 100; i++) {
+//			double[] sl =  ServiceLevel.getSimServiceLevelCritical(L, T, rate1, rate2, i, 0, r, case1, true);
+			
 
 //			System.out.println("Sl for crit "+ sl[0] + " sl for non crit "+ sl[1] + "with S "+ i + " and Sc "+ j);
-			if (sl[0] >= Bc && sl[1] >= Bn) {
-				return new double [] {i,0};
-			}	
+//			if (sl[0] >= Bc && sl[1] >= Bn) return new double [] {i,0};
+			
+			
+			double sl =  ServiceLevel.getServiceLevelNonCritical(L, T, rate1, rate2, i, 0);
+			if (sl > Bc) return new double [] {i,0};
 		}
 		
 		return null;
@@ -237,7 +240,7 @@ public static double[] getOptimalAll(double L, double T, int rate1, int rate2, d
 }
 
 
-public static int getSmin(double L, double T, int rate1, int rate2, double Bc, double Bn) {
+public static int getSmin(double L, double T, double rate1, double rate2, double Bc, double Bn) {
 	
 	for (int Smin= 1; Smin < 100; Smin++) {
 		if (ServiceLevel.getServiceLevelNonCritical(L, T, rate1, rate2, Smin, 0) >= Bn) {

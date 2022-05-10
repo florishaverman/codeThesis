@@ -3,11 +3,33 @@ import java.util.Random;
 public class Table {
 	
 	public static void main(String[] args) {
+		long startTime, endTime;
+		startTime = System.currentTimeMillis();
+
 //		createTable1();
 		
 //		createTable2();
 		
-		createTable3();
+//		createTable3();
+		
+//		Table.createTable4(true);
+//		Table.createTable5(true); //Takes a long time to run
+		
+//		createTable6(true); //TODO: Infinite loop.
+//		createTable7(true);
+//		createTable8(true);
+
+//		Table.createLin678(0.5, 0.5, 20, 20, 0.99, 0.8, new Random(1234), true, true);
+//		double[]  slSim = Simulation.runSimulationBrute(0.5, 0.5, 20, 20, 0.99, 0.8, new Random(1234), true, true);
+//		double  slNoRat= Simulation.getOptimalForNoRat(0.5, 0.40, 20, 20, 0.99, 0.8, new Random(1234), true)[0];
+
+		
+		
+
+
+		 endTime = System.currentTimeMillis();
+
+		System.out.println("That took " + (endTime - startTime) + " milliseconds");
 	}
 	
 	public static void createTable1() {
@@ -20,7 +42,7 @@ public class Table {
 		Random r =  new Random(1234);
 		
 		rate1 = 1;
-		rate2 = 4; 
+		rate2 = 4;
 		S = 5;
 		Sc = 3;
 		for (rate1 = 1; rate1 < 13; rate1++) {
@@ -154,6 +176,99 @@ public class Table {
 
 		}
 	}
+	
+	public static void createTable6(boolean minimiseSc) {
+		int ratec, raten;
+		double T, L, Bc, Bn;
+		boolean case1 = true;
+		
+		String d = " , ";
+		
+		Random r =  new Random(1234);
+		
+		Bc = 0.99;
+		Bn = 0.8;
+		ratec = 10;
+		raten = 10; 
+		L = 0.5;
+		T= 0.0;
+		
+		for ( T = 0; T < 0.51; T += 0.05) {
+			
+			Table.createLin678(L, F.round(T,2), ratec, raten, Bc, Bn, r, case1, minimiseSc);
+						
+		}
+	}
+	
+	public static void createTable7(boolean minimiseSc) {
+		int ratec;
+		double raten;
+		double T, L, Bc, Bn;
+		boolean case1 = true;
+				
+		Random r =  new Random(1234);
+		
+		Bc = 0.99;
+		Bn = 0.8;
+		ratec = 10;
+		raten = 10; 
+		L = 0.5;
+		T= 0.0;
+		
+		for ( T = 0; T < 0.49; T += 0.05) {
+			T = F.round(T,2);
+			raten = ratec * L /(L - T);
+			Table.createLin678(L, T, ratec, F.round(raten, 2), Bc, Bn, r, case1, minimiseSc);
+						
+		}
+	}
+	
+
+	public static void createTable8(boolean minimiseSc) {
+		double T, L, Bc, Bn, raten, ratec;
+		boolean case1 = true;
+				
+		Random r =  new Random(1234);
+		
+		Bc = 0.99;
+		Bn = 0.8;
+		ratec = 10;
+		raten = 10; 
+		L = 0.5;
+		T= 0.0;
+		
+		for ( T = 0; T < 0.51; T += 0.05) {
+			T = F.round(T,2);
+			raten = F.round(10 / (1-T) ,2);
+			ratec = raten;
+			Table.createLin678(L, T, ratec, F.round(raten, 2), Bc, Bn, r, case1, minimiseSc);
+						
+		}
+	}
+
+	public static void createLin678(double L, double T, double ratec, double raten, double Bc, double Bn, Random r, boolean case1, boolean minimiseSc) {
+		String d = " , ";
+		
+		case1= true;
+		double[]  slSim = Simulation.runSimulationBrute(L, T, ratec, raten, Bc, Bn, r, case1, minimiseSc);
+		double  slNoRat= Simulation.getOptimalForNoRat(L, T, ratec, raten, Bc, Bn, r, case1)[0];
+		System.out.print(ratec+ d);	
+		System.out.print(raten+ d);	
+		System.out.print(L+ d);	
+		System.out.print(F.round(T,2)+ d);	
+		System.out.print(slNoRat + d);
+		System.out.print(slSim[0] + d);
+		System.out.print(slSim[1] + d);
+		System.out.print(F.round(100 * (slNoRat - slSim[0])/ slNoRat,2)+ d);
+
+		case1= false;
+		slSim = Simulation.runSimulationBrute(L, T, ratec, raten, Bc, Bn, r, case1, minimiseSc);
+		slNoRat= Simulation.getOptimalForNoRat(L, T, ratec, raten, Bc, Bn, r, case1)[0];
+		System.out.print(slSim[0] + d);
+		System.out.print(slSim[1] + d);
+		System.out.println(F.round(100 * (slNoRat - slSim[0])/ slNoRat,2));
+	}
+
 	
 	public static void createLine45(double L, double T, int rate1, int i, double Bc, double Bn, Random r, boolean case1, boolean minimiseSc) {
 		case1= true;
