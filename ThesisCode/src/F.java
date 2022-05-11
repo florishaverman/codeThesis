@@ -3,8 +3,20 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.Random;
 
+/**
+ * This class contains some useful functions, like generating random numbers or to calculate a factorial 
+ * This class does not 
+ * @author Floris Haverman 
+ *
+ *	(Not an interesting class)
+ */
 public class F {
 	
+	/**
+	 * This function calculates the factorial for a given value
+	 * @param number the factorial you want to calculate
+	 * @return The factorial of the given number
+	 */
 	public static long factorial(int number) {
         long result = 1;
 
@@ -15,7 +27,11 @@ public class F {
         return result;
     }
 	
-	 // Returns Factorial of N
+	/**
+	 * Returns the factorial of a number in BigInteger, thus allowing for bigger factorials
+	 * @param N integer
+	 * @return The factorial of the given number 
+	 */
     public static BigInteger factorial2(int N)
     {
         // Initialize result
@@ -28,56 +44,37 @@ public class F {
         return f;
     }
 	
-	
+	/**
+	 * A method to round a number to a certain amount of decimals
+	 * @param d The number you want to round
+	 * @param p The amount of decimal places
+	 * @return The rounded number
+	 */
 	public static double round(double d , int p) {
 		return Math.round(d* Math.pow(10, p)) / Math.pow(10, p);
 	}
 
-	public static double pdfPoissionComplex(int i, double lambda) {
-		BigDecimal nbr = new BigDecimal(i);
-		BigDecimal rate = new BigDecimal(lambda);
-		BigDecimal e = new BigDecimal(Math.E);
-		BigDecimal one = e.pow((int) lambda); //Cast to int could give problems is lambda is not in integer.
-		BigDecimal two = rate.pow(i);
-		
-//		 return Math.exp(- lambda) * Math.pow(lambda, i) / F.factorial(i);
-		BigDecimal result = two.divide(new BigDecimal(F.factorial(i)).multiply(one)) ;
-		return result.doubleValue();
-				 
-	}
 	
+	/**
+	 * This method calculates the pdf of the Poisson distribution.
+	 * The method used BigDecimal to allow for larger rates.
+	 * @param i 
+	 * @param lambda The rate of the distribution
+	 * @return the probability of getting i from a Poisson distribution with rate lambda
+	 */
 	public static double pdfPoission(int i, double lambda) {
-//		System.out.println(Math.exp(- lambda));
-//		System.out.println(Math.pow(lambda, i));
-//		System.out.println(F.factorial2(i));
-		
 		BigDecimal one = new BigDecimal(Math.exp(- lambda) * Math.pow(lambda, i));
 		BigDecimal two = one.divide(new BigDecimal(F.factorial2(i)), new MathContext(10));
-//		System.out.println(two.doubleValue());
-		
-//		System.out.println(new BigDecimal(Math.exp(- lambda) * Math.pow(lambda, i)));
-		 return two.doubleValue();
+		return two.doubleValue();
 	}
 	
 	
-	
-	public static double cdfPoisson(int k, double lambda) {
-		BigDecimal sumPart = new BigDecimal(0);
-		
-		MathContext mc = new MathContext(10);
-		for (int i = 0; i < k; i++) {
-			System.out.println("For i "+ i + " the value is " + new BigDecimal(lambda).pow(i).divide(new BigDecimal(F.factorial2(i)), mc ));
-			sumPart.add(new BigDecimal(lambda).pow(i).divide(new BigDecimal(F.factorial2(i)), mc ));
-//			sumPart += Math.pow(lambda, i) / F.factorial(i);
-		}
-		
-//		return sumPart * Math.exp(-lambda);
-		System.out.println(sumPart.divide(new BigDecimal(Math.E).pow((int) lambda), mc));
-		return sumPart.divide(new BigDecimal(Math.E).pow((int) lambda), mc).doubleValue();
-
-	}
-
-	
+	/**
+	 * Return a Poisson distributed random variable with a given rate.
+	 * @param r The Random object which is used to create randomness
+	 * @param mean The mean of the distribution
+	 * @return A random draw from the distribution
+	 */
 	public static int getPoissonRandom(Random r,double mean) {
 	    double L = Math.exp(-mean);
 	    int k = 0;
@@ -89,6 +86,12 @@ public class F {
 	    return k - 1;
 	}
 	
+	/**
+	 * Returns a exponentially distributed random variable
+	 * @param r The Random object which is used to create randomness
+	 * @param rate The rate of the distribution 
+	 * @return A random draw from the distribution
+	 */
 	public static double getExponetialRandom(Random r,double rate) {
 	    return - Math.log(r.nextDouble()) / rate;
 	}
