@@ -8,17 +8,20 @@ import java.util.Random;
  *
  *	(Medium interesting class)
  */
-public class Table {
+public class TablesExtension {
 	
 	public static void main(String[] args) {
 		long startTime, endTime;
 		startTime = System.currentTimeMillis();
 		
-		createTable1();
+//		createTable();
+
+		
+//		createTable1();
 
 //		createTable2(); 
 		
-//		createTable3();
+		createTable3();
 		
 //		Table.createTable4(true);
 		
@@ -40,6 +43,35 @@ public class Table {
 		System.out.println("That took " + (endTime - startTime) + " milliseconds");
 	}
 	/**
+	 * Create table
+	 */
+	public static void createTable() {
+		int S, Sc, rate1, rate2;
+		double T, L;
+		T= 0.5;
+		L = 0.5;
+		boolean case1 = true;
+		
+		Random r =  new Random(1234);
+		
+		//Set the system parameters
+		rate1 = 10;
+		rate2 = 4;
+		S = 14;
+		Sc = 3;
+		
+		double p = 0.5;
+		
+		for (p = 0; p < 1.05; p+=0.1) {
+			p = F.round(p, 1);
+			System.out.print(p + " , ");
+			TablesExtension.createLine(L, T, rate1, rate2, S, Sc, r, case1, p);
+			
+		}
+		
+	}
+	
+	/**
 	 * Create table 1
 	 */
 	public static void createTable1() {
@@ -56,17 +88,19 @@ public class Table {
 		rate2 = 4;
 		S = 5;
 		Sc = 3;
+		
+		double p = 0.5;
+		
+		//update the rates to match original case	
 		for (rate1 = 1; rate1 < 13; rate1++) {
 			S = rate1 + 4;
-			Table.createLine(L, T, rate1, rate2, S, Sc, r, case1);
+			TablesExtension.createLine(L, T, rate1, rate2, S, Sc, r, case1, p);
 			
-
-
 		}
 		S = 8;
 		for (rate1 = 2; rate1 < 9; rate1++) {
 			Sc = rate1 - 1;
-			Table.createLine(L, T, rate1, rate2, S, Sc, r, case1);
+			TablesExtension.createLine(L, T, rate1, rate2, S, Sc, r, case1, p);
 		}
 	}
 
@@ -87,15 +121,17 @@ public class Table {
 		S = 5;
 		Sc = 2;
 		
+		double p = 0.5;
+		
 		for (rate1 = 4; rate1 < 10; rate1++) {
 			S = rate1 + 1;
-			Table.createLine(L, T, rate1, rate2, S, Sc, r, case1);
+			TablesExtension.createLine(L, T, rate1, rate2, S, Sc, r, case1, p);
 		}
 		
 		S = 7;
 		for (rate1 = 5; rate1 < 9; rate1++) {
 			Sc = rate1 - 4;
-			Table.createLine(L, T, rate1, rate2, S, Sc, r, case1);
+			TablesExtension.createLine(L, T, rate1, rate2, S, Sc, r, case1, p);
 		}
 		
 	}
@@ -117,23 +153,27 @@ public class Table {
 		L = 0.5;
 		T= 0.1;
 		
+		double p = 0.5;
 		
 		for (S = 7; S < 12; S++) {
-			Table.createLine(L, T, rate1, rate2, S, Sc, r, case1);
+			System.out.print(p +" , " + L+" , " + T +" , ");
+			TablesExtension.createLine(L, T, rate1, rate2, S, Sc, r, case1, p);
 		}
 		
 		S = 5;
 		Sc = 2;
 		rate1 = 1;
 		rate2 = 1; 
-//		L = 1;
-//		T= 0.5;
+		L = 1;
+		T= 0.5;
 		for (rate1 = 1; rate1 < 6; rate1++) {
-			Table.createLine(L, T, rate1, rate2, S, Sc, r, case1);
+			System.out.print(p +" , " + L+" , " + T +" , ");
+			TablesExtension.createLine(L, T, rate1, rate2, S, Sc, r, case1,p);
 		}
 		rate1 = 1;
 		for (rate2 = 1; rate2 < 6; rate2++) {
-			Table.createLine(L, T, rate1, rate2, S, Sc, r, case1);
+			System.out.print(p +" , " + L+" , " + T +" , ");
+			TablesExtension.createLine(L, T, rate1, rate2, S, Sc, r, case1, p);
 		}
 		
 		S = 14;
@@ -143,7 +183,20 @@ public class Table {
 		L = 0.5;
 		T= 0.1;
 		for (T = 0.1; T < 0.55; T += 0.1) {
-			Table.createLine(L, T, rate1, rate2, S, Sc, r, case1);
+			System.out.print(p +" , " + L+" , " + T +" , ");
+			TablesExtension.createLine(L, T, rate1, rate2, S, Sc, r, case1, p);
+		}
+		
+		S = 12;
+		Sc = 3;
+		rate1 = 8;
+		rate2 = 4; 
+		L = 0.5;
+		T= 0.1;
+		for (p = 0.0; p < 1.01; p += 0.2) {
+			p = F.round(p, 4);
+			System.out.print(p +" , " + L+" , " + T +" , ");
+			TablesExtension.createLine(L, T, rate1, rate2, S, Sc, r, case1, p);
 		}
 	}
 	
@@ -371,23 +424,28 @@ public class Table {
 	 * @param r A Random object used to create randomness
 	 * @param case1 A boolean to indicate if class 1 is the critical class (true) of not (false)
 	 */
-	public static void createLine(double L, double T, int rate1, int rate2, int S, int Sc, Random r, boolean case1) {
+	public static void createLine(double L, double T, int rate1, int rate2, int S, int Sc, Random r, boolean case1, double p) {
 		case1 = true;
-		double slSim = F.round(ServiceLevel.getSimServiceLevelCritical(L, T, rate1, rate2, S, Sc, r, case1),4);
-		double slAprox = F.round(ServiceLevel.getAproxServiceLevelCritical(L, T, rate1, rate2, S, Sc, case1),4);
+		
+		double rate1new = rate1 + (1-p) * rate2;
+		double rate2new = p* rate2;	
+
+		
+		double slSim = F.round(Extension.getSimServiceLevelCritical(L, T, rate1, rate2, S, Sc, r, case1, p),4);
+		double slAprox = F.round(Extension.getAproxServiceLevelCritical(L, T, rate1new, rate2new, S, Sc, case1,p),4);
 		System.out.print(rate1 + " , ");
 		System.out.print(rate2 + " , ");
 		System.out.print(S + " , ");
 		System.out.print(Sc + " , ");
-		System.out.print(F.round(ServiceLevel.getServiceLevelNonCritical(L, T, rate1, rate2, S, Sc),4) + " , ");
+		System.out.print(F.round(Extension.getServiceLevelNonCritical(L, T, rate1new, rate2new, S, Sc,p),4) + " , ");
 		System.out.print(slSim + " , ");
 		System.out.print(slAprox + " , ");
 		System.out.print(F.round( 100 * (slSim - slAprox)/ slSim, 2));
 		System.out.print(" , ");
 		case1 = false;
-		slSim = F.round(ServiceLevel.getSimServiceLevelCritical(L, T, rate2, rate1, S, Sc, r, case1),4);
-		slAprox = F.round(ServiceLevel.getAproxServiceLevelCritical(L, T, rate2, rate1, S, Sc, case1),4);
-		System.out.print(F.round(ServiceLevel.getServiceLevelNonCritical(L, T, rate2, rate1, S, Sc),4) + " , ");
+		slSim = F.round(Extension.getSimServiceLevelCritical(L, T, rate2, rate1, S, Sc, r, case1, p),4);
+		slAprox = F.round(Extension.getAproxServiceLevelCritical(L, T, rate2new, rate1new, S, Sc, case1,p),4);
+		System.out.print(F.round(Extension.getServiceLevelNonCritical(L, T, rate2new, rate1new, S, Sc,p),4) + " , ");
 		System.out.print(slSim + " , ");
 		System.out.print(slAprox + " , ");
 		System.out.println(F.round( 100 * (slSim - slAprox)/ slSim, 2));

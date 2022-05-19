@@ -4,7 +4,7 @@ import java.math.MathContext;
 /**
  * This class contains methods to calculate the integral 
  * needed in the calculations of the approximate service level for the critical class 
- * @author Floris Haverman 
+ * @author Floris Haverman
  *
  *	(Not an interesting class)
  */
@@ -156,6 +156,7 @@ class Function{
 		
 		return firstPart  * secondPart;
 	}
+	
 	
 	
 	   

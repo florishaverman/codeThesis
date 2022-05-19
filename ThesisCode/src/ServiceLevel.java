@@ -15,20 +15,21 @@ public class ServiceLevel {
 		
 		int S, Sc, rate1, rate2;
 		double T, L, Bc, Bn;
-		boolean case1 = true;
+		boolean case1 = false;
 		
 		Random r =  new Random(1234);
 		
 		// set parameters for the modle
-		Sc = 5;// Critical level
-		S = 2; // Base stock level
+		Sc = 3;// Critical level
+		S = 5; // Base stock level
 		rate1 = 1;//Rate class 1
-		rate2 = 1; //Rate class 2
+		rate2 = 4; //Rate class 2
 		T= 0.1; //Demand lead time
 		L = 0.5; // Supply lead time		
 
 	
-			
+		System.out.println(F.round(getSimServiceLevelCritical(L, T, rate1, rate2, S, Sc, r, case1),4));
+
 		/*
 //		L = 1;
 //		T= 0.5;
@@ -95,7 +96,7 @@ public class ServiceLevel {
 	public static double getAproxServiceLevelCritical(double L, double T, double rate1, double rate2, int S, int Sc, boolean case1) {
 		//Parameters
 		//n is the number of partitions
-		int n = 1000; 
+		int n = 10000; 
 		double serviceLevel = 0;
 		
 		for (int i = 0; i < S - Sc; i++) {

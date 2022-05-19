@@ -95,4 +95,8 @@ public class F {
 	public static double getExponetialRandom(Random r,double rate) {
 	    return - Math.log(r.nextDouble()) / rate;
 	}
+	
+	public static double getNormalRandom(Random r, double mu, double sigma) {
+		return r.nextGaussian() * sigma + mu;
+	}
 }
