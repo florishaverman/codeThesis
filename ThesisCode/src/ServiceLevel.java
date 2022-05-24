@@ -20,15 +20,15 @@ public class ServiceLevel {
 		Random r =  new Random(1234);
 		
 		// set parameters for the modle
-		Sc = 3;// Critical level
-		S = 5; // Base stock level
+		Sc = 1;// Critical level
+		S = 6; // Base stock level
 		rate1 = 1;//Rate class 1
-		rate2 = 4; //Rate class 2
+		rate2 = 6; //Rate class 2
 		T= 0.1; //Demand lead time
 		L = 0.5; // Supply lead time		
 
 	
-		System.out.println(F.round(getSimServiceLevelCritical(L, T, rate1, rate2, S, Sc, r, case1),4));
+		System.out.println(F.round(getSimServiceLevelCritical(L, T, rate2, rate1, S, Sc, r, case1),4));
 
 		/*
 //		L = 1;

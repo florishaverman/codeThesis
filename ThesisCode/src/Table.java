@@ -14,7 +14,7 @@ public class Table {
 		long startTime, endTime;
 		startTime = System.currentTimeMillis();
 		
-		createTable1();
+//		createTable1();
 
 //		createTable2(); 
 		
@@ -33,7 +33,28 @@ public class Table {
 //		createTable8(true);
 		
 //		Table.createAllTables();
+		int S, Sc, rate1, rate2;
+		double T, L, Bc, Bn;
+		boolean case1 = true;
 		
+		
+//		Random r =  new Random(9);
+		
+		Bc = 0.99;
+		Bn = 0.8;
+		rate1 = 1;
+		rate2 = 1; 
+		L = 0.5;
+		T= 0.1;
+		int counter = 0;
+		for (int i = 1; i < 100; i ++) {			
+			double temp = ServiceLevel.getSimServiceLevelCritical(L, T, rate1, 6, 6, 1, new Random(i), case1);
+			System.out.println(temp);
+			if (temp >= 0.99) counter++;
+//			Table.createLine45(L, T, rate1, 6, Bc, Bn, new Random(i), case1, true);
+		}
+		System.out.println("This is the counter " + counter);
+
 
 		 endTime = System.currentTimeMillis();
 
@@ -126,8 +147,8 @@ public class Table {
 		Sc = 2;
 		rate1 = 1;
 		rate2 = 1; 
-//		L = 1;
-//		T= 0.5;
+		L = 1;
+		T= 0.5;
 		for (rate1 = 1; rate1 < 6; rate1++) {
 			Table.createLine(L, T, rate1, rate2, S, Sc, r, case1);
 		}
@@ -289,14 +310,14 @@ public class Table {
 	 * @param case1 A boolean to indicate if class 1 is the critical class (true) of not (false)
 	 * @param minimiseSc A boolean to indicate if we want to minimize Sc
 	 */
-	public static void createLin678(double L, double T, double ratec, double raten, double Bc, double Bn, Random r, boolean case1, boolean minimiseSc) {
+	public static void createLin678(double L, double T, double rate1, double rate2, double Bc, double Bn, Random r, boolean case1, boolean minimiseSc) {
 		String d = " , ";
 		
 		case1= true;
-		double[]  slSim = Simulation.runSimulationBrute(L, T, ratec, raten, Bc, Bn, r, case1, minimiseSc);
-		double  slNoRat= Simulation.getOptimalForNoRat(L, T, ratec, raten, Bc, Bn, r, case1)[0];
-		System.out.print(ratec+ d);	
-		System.out.print(raten+ d);	
+		double[]  slSim = Simulation.runSimulationBrute(L, T, rate1, rate2, Bc, Bn, r, case1, minimiseSc);
+		double  slNoRat= Simulation.getOptimalForNoRat(L, T, rate1, rate2, Bc, Bn, r, case1)[0];
+		System.out.print(rate1+ d);	
+		System.out.print(rate1+ d);	
 		System.out.print(L+ d);	
 		System.out.print(F.round(T,2)+ d);	
 		System.out.print(slNoRat + d);
@@ -305,8 +326,8 @@ public class Table {
 		System.out.print(F.round(100 * (slNoRat - slSim[0])/ slNoRat,2)+ d);
 
 		case1= false;
-		slSim = Simulation.runSimulationBrute(L, T, ratec, raten, Bc, Bn, r, case1, minimiseSc);
-		slNoRat= Simulation.getOptimalForNoRat(L, T, ratec, raten, Bc, Bn, r, case1)[0];
+		slSim = Simulation.runSimulationBrute(L, T, rate1, rate2, Bc, Bn, r, case1, minimiseSc);
+		slNoRat= Simulation.getOptimalForNoRat(L, T, rate1, rate2, Bc, Bn, r, case1)[0];
 		System.out.print(slSim[0] + d);
 		System.out.print(slSim[1] + d);
 		System.out.println(F.round(100 * (slNoRat - slSim[0])/ slNoRat,2));

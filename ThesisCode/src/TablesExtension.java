@@ -14,28 +14,67 @@ public class TablesExtension {
 		long startTime, endTime;
 		startTime = System.currentTimeMillis();
 		
-//		createTable();
+		
+//		createTable10();
+		createTable9();
 
 		
 //		createTable1();
 
 //		createTable2(); 
 		
-		createTable3();
+//		createTable3();
 		
-//		Table.createTable4(true);
-		
-
-//		Table.createTable5(true); 
+//		createTable4(true);
 		
 
-//		createTable6(true);
 		
-//		createTable7(true);
+//		createTable5(true, 0.25);
+		
+		/*
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+		createTable5(true, 0.8);
+
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+		createTable5(true, 1);
+		 */
+//		createTable6(true, 0.25);
+		
+//		createTable7(true, 1);
 		
 //		createTable8(true);
 		
 //		Table.createAllTables();
+		
+//		createTable7(true, 0.25);
+		
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+//		createTable7(true, 0.5);
+//		createTable8(true, 0.5);
+		
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+//		createTable7(true, 0.8);
+//		createTable8(true, 0.8);
+
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+//		createTable7(true, 1);
+//		createTable8(true, 1);
+
 		
 
 		 endTime = System.currentTimeMillis();
@@ -45,10 +84,10 @@ public class TablesExtension {
 	/**
 	 * Create table
 	 */
-	public static void createTable() {
-		int S, Sc, rate1, rate2;
-		double T, L;
-		T= 0.5;
+	public static void createTable9() {
+		int S, Sc;
+		double T, L, rate1, rate2, Bc, Bn;
+		T= 0.1;
 		L = 0.5;
 		boolean case1 = true;
 		
@@ -56,17 +95,107 @@ public class TablesExtension {
 		
 		//Set the system parameters
 		rate1 = 10;
-		rate2 = 4;
+		rate2 = 10;
 		S = 14;
 		Sc = 3;
+		Bc = 0.99;
+		Bn = 0.8;
 		
+		//Constant net demand during lead time
+		int c =  10;
 		double p = 0.5;
+		boolean minimiseSc = true;
 		
-		for (p = 0; p < 1.05; p+=0.1) {
-			p = F.round(p, 1);
+		for (T = 0; T < 0.47; T+=0.05) {
+			T = F.round(T, 2);
+			double[]  slSim;
+			double pTemp;
+			double rate2Temp;
+			System.out.print(rate1 + " , ");
+			System.out.print(rate2+ " , ");
+			System.out.print(L + " , ");
+			System.out.print(T + " , ");
 			System.out.print(p + " , ");
-			TablesExtension.createLine(L, T, rate1, rate2, S, Sc, r, case1, p);
+			pTemp = p;
+			double  slNoRat= Extension.getOptimalForNoRat(L, T, rate1, F.round((c- rate1 * L) /(L - pTemp* T), 2), Bc, Bn, r, case1, pTemp);
+			System.out.print(slNoRat + " , ");
 			
+			pTemp = p;
+			slSim = Extension.runSimulationBrute(L, T, rate1, F.round((c- rate1 * L) /(L - pTemp* T), 2), Bc, Bn, r, case1, minimiseSc, pTemp);
+			System.out.print(slSim[0] + " , ");
+			System.out.print(slSim[1] + " , ");
+			System.out.print(F.round(100 * (slNoRat - slSim[0])/ slNoRat,2)+ " , ");
+			
+			pTemp = 1;
+			double tempT = p * T;
+			rate2Temp =  F.round((c- rate1 * L) /(L - tempT), 2);
+			slSim = Extension.runSimulationBrute(L, p*T, rate1, rate2Temp, Bc, Bn, r, case1, minimiseSc, pTemp);
+			System.out.print(tempT + " , ");
+			System.out.print(rate2Temp + " , ");
+			
+			System.out.print(slSim[0] + " , ");
+			System.out.print(slSim[1] + " , ");
+			System.out.print(F.round(100 * (slNoRat - slSim[0])/ slNoRat,2)+ " , ");
+			System.out.println();
+		}
+		
+	}
+	
+	/**
+	 * Create table
+	 */
+	public static void createTable10() {
+		int S, Sc;
+		double T, L, rate1, rate2, Bc, Bn;
+		T= 0.1;
+		L = 0.5;
+		boolean case1 = true;
+		
+		Random r =  new Random(1234);
+		
+		//Set the system parameters
+		rate1 = 50;
+		rate2 = 20;
+		S = 14;
+		Sc = 3;
+		Bc = 0.99;
+		Bn = 0.8;
+		
+		//Constant net demand during lead time
+		int c =  50;
+		double p = 0.5;
+		boolean minimiseSc = true;
+		
+		for (p = 0; p < 1.01; p+=0.1) {
+			p = F.round(p, 2);
+			double[]  slSim;
+			double tempT;
+			System.out.print(rate1 + " , ");
+			System.out.print(F.round((c- rate1 * L) /(L - p* T), 2)+ " , ");
+			System.out.print(L + " , ");
+			System.out.print(T + " , ");
+			System.out.print(p + " , ");
+			tempT= 0.1;
+			double  slNoRat= Extension.getOptimalForNoRat(L, tempT, rate1, F.round((c- rate1 * L) /(L - p* tempT), 2), Bc, Bn, r, case1, p);
+			System.out.print(slNoRat + " , ");
+			tempT= 0.1;
+			slSim = Extension.runSimulationBrute(L, tempT, rate1, F.round((c- rate1 * L) /(L - p* tempT), 2), Bc, Bn, r, case1, minimiseSc, p);
+			System.out.print(slSim[0] + " , ");
+			System.out.print(slSim[1] + " , ");
+			System.out.print(F.round(100 * (slNoRat - slSim[0])/ slNoRat,2)+ " , ");
+			
+			tempT= 0.2;
+			slSim = Extension.runSimulationBrute(L, tempT, rate1, F.round((c- rate1 * L) /(L - p* tempT), 2), Bc, Bn, r, case1, minimiseSc, p);
+			System.out.print(slSim[0] + " , ");
+			System.out.print(slSim[1] + " , ");
+			System.out.print(F.round(100 * (slNoRat - slSim[0])/ slNoRat,2)+ " , ");
+			
+			tempT= 0.4;
+			slSim = Extension.runSimulationBrute(L, tempT, rate1, F.round((c- rate1 * L) /(L - p* tempT), 2), Bc, Bn, r, case1, minimiseSc, p);
+			System.out.print(slSim[0] + " , ");
+			System.out.print(slSim[1] + " , ");
+			System.out.print(F.round(100 * (slNoRat - slSim[0])/ slNoRat,2)+ " , ");
+			System.out.println();
 		}
 		
 	}
@@ -89,7 +218,7 @@ public class TablesExtension {
 		S = 5;
 		Sc = 3;
 		
-		double p = 0.5;
+		double p = 0.8;
 		
 		//update the rates to match original case	
 		for (rate1 = 1; rate1 < 13; rate1++) {
@@ -153,7 +282,7 @@ public class TablesExtension {
 		L = 0.5;
 		T= 0.1;
 		
-		double p = 0.5;
+		double p = 1;
 		
 		for (S = 7; S < 12; S++) {
 			System.out.print(p +" , " + L+" , " + T +" , ");
@@ -204,7 +333,7 @@ public class TablesExtension {
 	 * Create table 4
 	 * @param minimiseSc A boolean to indicate if we want to minimize Sc
 	 */
-	public static void createTable4(boolean minimiseSc) {
+	public static void createTable4(boolean minimiseSc, double p) {
 		int S, Sc, rate1, rate2;
 		double T, L, Bc, Bn;
 		boolean case1 = true;
@@ -217,9 +346,10 @@ public class TablesExtension {
 		rate2 = 1; 
 		L = 0.5;
 		T= 0.1;
+//		double p = 0.8;
 		for (int i = 1; i < 11; i ++) {
 			
-			Table.createLine45(L, T, rate1, i, Bc, Bn, r, case1, minimiseSc);
+			TablesExtension.createLine45(L, T, rate1, i, Bc, Bn, r, case1, minimiseSc,p);
 
 		}
 	}
@@ -228,7 +358,7 @@ public class TablesExtension {
 	 * Create table 5
 	 * @param minimiseSc A boolean to indicate if we want to minimize Sc
 	 */
-	public static void createTable5(boolean minimiseSc) {
+	public static void createTable5(boolean minimiseSc, double p) {
 		int S, Sc, ratec, raten;
 		double T, L, Bc, Bn;
 		boolean case1 = true;
@@ -243,9 +373,11 @@ public class TablesExtension {
 		T= 0.5;
 		
 		double[] valuesSl = new double[] {0.9, 0.925, 0.95, 0.97, 0.98, 0.985, 0.99, 0.995};
+//		double p = 0.5;
+		
 		for (int i = 0; i < 8; i ++) {
 			
-			Table.createLine45(L, T, ratec, raten, valuesSl[i], Bn, r, case1, minimiseSc);
+			TablesExtension.createLine45(L, T, ratec, raten, valuesSl[i], Bn, r, case1, minimiseSc,p);
 
 		}
 	}
@@ -254,7 +386,7 @@ public class TablesExtension {
 	 * Create table 6
 	 * @param minimiseSc A boolean to indicate if we want to minimize Sc
 	 */
-	public static void createTable6(boolean minimiseSc) {
+	public static void createTable6(boolean minimiseSc, double p) {
 		int ratec, raten;
 		double T, L, Bc, Bn;
 		boolean case1 = true;
@@ -272,7 +404,7 @@ public class TablesExtension {
 		
 		for ( T = 0; T < 0.51; T += 0.05) {
 			
-			Table.createLin678(L, F.round(T,2), ratec, raten, Bc, Bn, r, case1, minimiseSc);
+			TablesExtension.createLin678(L, F.round(T,2), ratec, raten, Bc, Bn, r, case1, minimiseSc, p);
 						
 		}
 	}
@@ -281,7 +413,7 @@ public class TablesExtension {
 	 * Create table 7
 	 * @param minimiseSc A boolean to indicate if we want to minimize Sc
 	 */
-	public static void createTable7(boolean minimiseSc) {
+	public static void createTable7(boolean minimiseSc, double p) {
 		int ratec;
 		double raten;
 		double T, L, Bc, Bn;
@@ -298,8 +430,8 @@ public class TablesExtension {
 		
 		for ( T = 0; T < 0.49; T += 0.05) {
 			T = F.round(T,2);
-			raten = ratec * L /(L - T);
-			Table.createLin678(L, T, ratec, F.round(raten, 2), Bc, Bn, r, case1, minimiseSc);
+			raten =  ratec * L /(L - p* T);
+			TablesExtension.createLin678(L, T, ratec, F.round(raten, 2), Bc, Bn, r, case1, minimiseSc, p);
 						
 		}
 	}
@@ -308,7 +440,7 @@ public class TablesExtension {
 	 * Create table 8
 	 * @param minimiseSc A boolean to indicate if we want to minimize Sc
 	 */
-	public static void createTable8(boolean minimiseSc) {
+	public static void createTable8(boolean minimiseSc, double p) {
 		double T, L, Bc, Bn, raten, ratec;
 		boolean case1 = true;
 				
@@ -320,13 +452,14 @@ public class TablesExtension {
 		raten = 10; 
 		L = 0.5;
 		T= 0.0;
+		int constantRate = 10;
 		
 		for ( T = 0; T < 0.51; T += 0.05) {
 			T = F.round(T,2);
-			raten = F.round(10 / (1-T) ,2);
+			raten = F.round(constantRate / (2* L- p * T) ,2);
 			ratec = raten;
-			Table.createLin678(L, T, ratec, F.round(raten, 2), Bc, Bn, r, case1, minimiseSc);
-						
+			TablesExtension.createLin678(L, T, ratec, raten, Bc, Bn, r, case1, minimiseSc, p);
+			
 		}
 	}
 
@@ -342,14 +475,14 @@ public class TablesExtension {
 	 * @param case1 A boolean to indicate if class 1 is the critical class (true) of not (false)
 	 * @param minimiseSc A boolean to indicate if we want to minimize Sc
 	 */
-	public static void createLin678(double L, double T, double ratec, double raten, double Bc, double Bn, Random r, boolean case1, boolean minimiseSc) {
+	public static void createLin678(double L, double T, double rate1, double rate2, double Bc, double Bn, Random r, boolean case1, boolean minimiseSc, double p) {
 		String d = " , ";
 		
 		case1= true;
-		double[]  slSim = Simulation.runSimulationBrute(L, T, ratec, raten, Bc, Bn, r, case1, minimiseSc);
-		double  slNoRat= Simulation.getOptimalForNoRat(L, T, ratec, raten, Bc, Bn, r, case1)[0];
-		System.out.print(ratec+ d);	
-		System.out.print(raten+ d);	
+		double[]  slSim = Extension.runSimulationBrute(L, T, rate1, rate2, Bc, Bn, r, case1, minimiseSc, p);
+		double  slNoRat= Extension.getOptimalForNoRat(L, T, rate1, rate2, Bc, Bn, r, case1, p);
+		System.out.print(rate1+ d);	
+		System.out.print(rate2+ d);	
 		System.out.print(L+ d);	
 		System.out.print(F.round(T,2)+ d);	
 		System.out.print(slNoRat + d);
@@ -358,8 +491,8 @@ public class TablesExtension {
 		System.out.print(F.round(100 * (slNoRat - slSim[0])/ slNoRat,2)+ d);
 
 		case1= false;
-		slSim = Simulation.runSimulationBrute(L, T, ratec, raten, Bc, Bn, r, case1, minimiseSc);
-		slNoRat= Simulation.getOptimalForNoRat(L, T, ratec, raten, Bc, Bn, r, case1)[0];
+		slSim = Extension.runSimulationBrute(L, T, rate1, rate2, Bc, Bn, r, case1, minimiseSc, p);
+		slNoRat= Extension.getOptimalForNoRat(L, T, rate1, rate2, Bc, Bn, r, case1, p);
 		System.out.print(slSim[0] + d);
 		System.out.print(slSim[1] + d);
 		System.out.println(F.round(100 * (slNoRat - slSim[0])/ slNoRat,2));
@@ -377,12 +510,12 @@ public class TablesExtension {
 	 * @param case1 A boolean to indicate if class 1 is the critical class (true) of not (false)
 	 * @param minimiseSc A boolean to indicate if we want to minimize Sc
 	 */
-	public static void createLine45(double L, double T, int rate1, int i, double Bc, double Bn, Random r, boolean case1, boolean minimiseSc) {
+	public static void createLine45(double L, double T, int rate1, int i, double Bc, double Bn, Random r, boolean case1, boolean minimiseSc, double p) {
 		case1= true;
 
-		double[]  slSim = Simulation.runSimulationBrute(L, T, rate1, i, Bc, Bn, r, case1, minimiseSc);
-		double[]  slAprox = Simulation.getOptimalForAprox(L, T, rate1, i, Bc, Bn, r, case1, minimiseSc);
-		double  slNoRat= Simulation.getOptimalForNoRat(L, T, rate1, i, Bc, Bn, r, case1)[0];
+		double[]  slSim = Extension.runSimulationBrute(L, T, rate1, i, Bc, Bn, r, case1, minimiseSc, p);
+		double[]  slAprox = Extension.getOptimalForAprox(L, T, rate1, i, Bc, Bn, r, case1, minimiseSc, p);
+		double  slNoRat= Extension.getOptimalForNoRat(L, T, rate1, i, Bc, Bn, r, case1, p);
 //		System.out.print(Simulation.getSmin(L, T, rate1, i, Bc, Bn) + " ; ");
 		System.out.print(i+ " , ");		
 		System.out.print(Bc+ " , ");
@@ -399,9 +532,9 @@ public class TablesExtension {
 		
 		//Second part of the table
 		case1= false;
-		slSim = Simulation.runSimulationBrute(L, T, i, rate1, Bc, Bn, r, case1, minimiseSc);
-		slAprox = Simulation.getOptimalForAprox(L, T, i,rate1, Bc, Bn, r, case1, minimiseSc);
-		slNoRat= Simulation.getOptimalForNoRat(L, T, i, rate1, Bc, Bn, r, case1)[0];
+		slSim = Extension.runSimulationBrute(L, T, i, rate1, Bc, Bn, r, case1, minimiseSc, p);
+		slAprox = Extension.getOptimalForAprox(L, T, i,rate1, Bc, Bn, r, case1, minimiseSc, p);
+		slNoRat= Extension.getOptimalForNoRat(L, T, i, rate1, Bc, Bn, r, case1, p);
 //		System.out.print(Simulation.getSmin(L, T, i, rate1, Bc, Bn) + " ; ");
 //		System.out.print(i + " , ");
 		System.out.print(slNoRat + " , ");
@@ -459,6 +592,7 @@ public class TablesExtension {
 		long startTime, endTime;
 		startTime = System.currentTimeMillis();
 		
+		double p = 0.8;
 		createTable1();
 		
 		System.out.println();
@@ -483,7 +617,7 @@ public class TablesExtension {
 		System.out.println();
 		System.out.println();
 		
-		Table.createTable4(true);
+		createTable4(true, p);
 		
 		System.out.println();
 		System.out.println();
@@ -491,7 +625,7 @@ public class TablesExtension {
 		System.out.println();
 		System.out.println();
 		
-		Table.createTable5(true); 
+		createTable5(true, p); 
 		
 		System.out.println();
 		System.out.println();
@@ -499,14 +633,14 @@ public class TablesExtension {
 		System.out.println();
 		System.out.println();
 		
-		createTable6(true);
+		createTable6(true, p);
 		
 		System.out.println();
 		System.out.println();
 		System.out.println();
 		System.out.println();
 		System.out.println();
-		createTable7(true);
+		createTable7(true, p);
 		
 		System.out.println();
 		System.out.println();
@@ -514,7 +648,7 @@ public class TablesExtension {
 		System.out.println();
 		System.out.println();
 		
-		createTable8(true);
+		createTable8(true, p);
 		
 
 
