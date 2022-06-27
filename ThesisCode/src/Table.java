@@ -35,7 +35,6 @@ public class Table {
 		double T, L, Bc, Bn;
 		boolean case1 = true;
 		
-		
 //		Random r =  new Random(9);
 		
 		/* This small bit of code was used to examine the probability of the service level being just over 99%, 
