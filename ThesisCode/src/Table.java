@@ -22,9 +22,7 @@ public class Table {
 		
 //		Table.createTable4(true);
 		
-
 //		Table.createTable5(true); 
-		
 
 //		createTable6(true);
 		
