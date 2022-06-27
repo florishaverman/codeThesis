@@ -24,7 +24,6 @@ public class Table {
 		
 
 //		Table.createTable5(true); 
-		
 
 //		createTable6(true);
 		
