@@ -2,8 +2,16 @@ import java.util.Random;
 
 
 /**
- * This class can create tables 1-8 of the paper of Kocaga and Sen
- * It prints the results in the console in the same format as in the paper
+ * This class is used to create the tables used in my paper.
+ * Note that I produced many more tables than reported in my paper. 
+ * 
+ * One example which you can look at is createTable1Extension() this is used to create the first table of my results.
+ * 
+ * All results are printed in the console, which can be copied and further processed using other software programs, like excel. 
+ * 
+ * Running the createAllTables() uses every method to create one table, 
+ * note that different setting can be used for each table,
+ * this methods takes me about 25 minutes to run.
  * @author Floris Haverman 
  *
  *	(Medium interesting class)
@@ -16,7 +24,7 @@ public class TablesExtension {
 		
 		
 //		createTable10();
-		createTable9();
+//		createTable9();
 
 		
 //		createTable1();
@@ -27,24 +35,9 @@ public class TablesExtension {
 		
 //		createTable4(true);
 		
-
-		
-//		createTable5(true, 0.25);
-		
-		/*
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		
-		createTable5(true, 0.8);
-
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		
-		createTable5(true, 1);
-		 */
-//		createTable6(true, 0.25);
+//		createTable5(true, 0.8);
+	
+//		createTable6(true, 0.8);
 		
 //		createTable7(true, 1);
 		
@@ -53,18 +46,19 @@ public class TablesExtension {
 //		Table.createAllTables();
 		
 //		createTable7(true, 0.25);
-		
+//		createAllTables();
 		System.out.println();
 		System.out.println();
 		System.out.println();
 		
 //		createTable7(true, 0.5);
-//		createTable8(true, 0.5);
+		//createTable1Extension();
 		
 		System.out.println();
 		System.out.println();
 		System.out.println();
-		
+//		createTable6(true, 1);
+
 //		createTable7(true, 0.8);
 //		createTable8(true, 0.8);
 
@@ -198,6 +192,50 @@ public class TablesExtension {
 			System.out.println();
 		}
 		
+	}
+	
+	/**
+	 * Create table
+	 */
+	public static void createTable1Extension() {
+		
+		int S, Sc, rate1, rate2;
+		double T, L;
+		T= 0.1;
+		L = 0.5;
+		boolean case1 = true;
+		
+		Random r =  new Random(1234);
+		
+		//Set the system parameters
+		rate1 = 10;
+		rate2 = 8;
+		S = 14;
+		Sc = 3;
+		
+		double[] pValues = new double[] { 0.2, 0.4, 0.6, 0.8, 1};
+		double p = 0.8;
+		
+		for (int i = 0; i < 5; i ++) {
+			for (int j = 0; j < 4; j ++) {
+				System.out.print(pValues[i] + " , ");
+				TablesExtension.createLine(L, T, rate1, rate2, S- 2*j, Sc, r, case1, pValues[i]);
+
+			}
+		}
+		/*
+		//update the rates to match original case	
+		for (rate1 = 1; rate1 < 13; rate1++) {
+			S = rate1 + 4;
+			TablesExtension.createLine(L, T, rate1, rate2, S, Sc, r, case1, p);
+			
+		}
+		S = 8;
+		for (rate1 = 2; rate1 < 9; rate1++) {
+			Sc = rate1 - 1;
+			TablesExtension.createLine(L, T, rate1, rate2, S, Sc, r, case1, p);
+		}
+		*/
 	}
 	
 	/**
@@ -649,6 +687,30 @@ public class TablesExtension {
 		System.out.println();
 		
 		createTable8(true, p);
+		
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+		createTable9();
+		
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+		createTable10();
+		
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+		createTable1Extension();
 		
 
 

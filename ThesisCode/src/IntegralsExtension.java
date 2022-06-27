@@ -3,9 +3,6 @@ import java.math.MathContext;
 
 public class IntegralsExtension {
 	
-	
-	
-	
 	/**
 	 * Calculates a integral using the Simpson's method.
 	 * @param L The system parameter for supply lead time
@@ -107,7 +104,8 @@ public class IntegralsExtension {
 	
 	
 	/**
-	 * This method calculates the sum part which needs to be calculated in both integrals
+	 * This method calculates the sum part which needs to be calculated in both integrals.
+	 * the sum part is the probabilty that at least one item is left at time t + L conditional on the hitting time.
 	 * @param L The system parameter for supply lead time
 	 * @param T The system parameter for demand lead time
 	 * @param rate1 The rate of class 1 customers
