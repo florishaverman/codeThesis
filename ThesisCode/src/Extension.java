@@ -4,7 +4,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+/**
+ * This class is used to obtain the simulated and approximated critical and exact non-critical service level.
+ * It also includes the optimization algorithm to optimize the parameters S and S_c. 
+ * @author Floris Haverman
+ * 
+ * (interesting class)
+ *
+ */
 public class Extension {
+	/**
+	 * This is the main method of the class. 
+	 * In this does not have to be used as all methods can be called from outside this class,
+	 * so this is mainly for testing.
+	 * 
+	 * Left at some random testing settings.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		System.out.println("Hello world");
 		int S, Sc;
@@ -22,7 +39,7 @@ public class Extension {
 		L = 0.5; // Supply lead time
 		p = 0.5; //probability a class to demand has dlt of T.
 		
-		
+		//object used to pass on system parameters. 
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("L", L);
 		parameters.put("T", T);
@@ -51,6 +68,18 @@ public class Extension {
 
 	}
 	
+	
+	/**
+	 * This method is used to calculate the exact non-critical service level for the exended model. 
+	 * @param L The system parameter for supply lead time
+	 * @param T The system parameter for demand lead time
+	 * @param rate1 The rate of class 1 customers
+	 * @param rate2 The rate of class 2 customers
+	 * @param S The order up to level
+	 * @param Sc The critical level
+	 * @param p The probabilty class 2 has DLT of T.
+	 * @return the non critical service level
+	 */
 	public static double  getServiceLevelNonCritical(double L, double T, double rate1, double rate2, int S, int Sc, double p) {
 		double serviceLevel = 0;
 		
@@ -58,12 +87,9 @@ public class Extension {
 		double rate1new = rate1 + (1-p) * rate2;
 		double rate2new = p* rate2;
 		
-		for (int i = 0; i < S - Sc; i++) {
-			
-//			double temp = F.pdfPoission(i, (rate1 + rate2 *(1-p)) * L + p*  rate2 * (L - T) );
-			double temp = F.pdfPoission(i, rate1new * L +  rate2new * (L - T) );
-//			System.out.println("For i "+ i + " the value is " + temp);
 		
+		for (int i = 0; i < S - Sc; i++) {
+			double temp = F.pdfPoission(i, rate1new * L +  rate2new * (L - T) );		
 			serviceLevel += temp;
 		}		
 		
@@ -71,34 +97,45 @@ public class Extension {
 		
 	}
 	
+	/**
+	 * Calculates the approximate service level of the critical class
+	 * @param L The system parameter for supply lead time
+	 * @param T The system parameter for demand lead time
+	 * @param rate1 The rate of class 1 customers
+	 * @param rate2 The rate of class 2 customers
+	 * @param S The order up to level
+	 * @param Sc The critical level
+	 * @param case1 A boolean to indicate if class 1 is the critical class (true) of not (false)
+	 * @param p The probabilty class 2 has DLT of T.
+	 * @return The service level of the critical class
+	 */
 	public static double getAproxServiceLevelCritical(double L, double T, double rate1, double rate2, int S, int Sc, boolean case1, double p) {
 		//Parameters
-		//n is the number of partitions
+		//n is the number of partitions to numerically calculate each integral
 		int n = 10000; 
 		double serviceLevel = 0;
 		
 		
+		//The third part is just the non-critical service level
 		for (int i = 0; i < S - Sc; i++) {
-			
-//			double temp = F.pdfPoission(i, (rate1 + rate2 *(1-p)) * L + p*  rate2 * (L - T) );
-			double temp = F.pdfPoission(i, (rate1 + (1-p) * rate2) * L +  p * rate2 * (L - T) );
-//			System.out.println("For i "+ i + " the value is " + temp);
-		
+			double temp = F.pdfPoission(i, (rate1 + (1-p) * rate2) * L +  p * rate2 * (L - T) );		
 			serviceLevel += temp;
 		}
 		
+		//Part one and Part two are the first and second integral needed to calculate the approximation.
 		double partone = IntegralsExtension.IntSimpson(L, T, rate1, rate2, S, Sc, 0, (L - T), n, true, case1, p) ;
 		double parttwo = IntegralsExtension.IntSimpson(L, T, rate1, rate2, S, Sc, (L - T), L,  n, false, case1, p);
-//		System.out.println("service level "+ serviceLevel );
-//		System.out.println("this is the first one "+ partone );
-//		System.out.println("this is the second one "+ parttwo);
-//		System.out.println("total "+ (partone + parttwo + serviceLevel));
+
+		//return the approximation of the critical service level.
 		return serviceLevel + partone
 					+ parttwo;
 	}
 
 	/**
+	 * This methods calculates the simulated critical service level
 	 * 
+	 * Note that, we use in initialization period to reduce the effect of the initialization.
+	 *  
 	 * @param L The system parameter for supply lead time
 	 * @param T The system parameter for demand lead time
 	 * @param rate1 The rate of class 1 customers
@@ -107,7 +144,7 @@ public class Extension {
 	 * @param Sc The critical level
 	 * @param r A Random object used to create randomness
 	 * @param case1 A boolean to indicate if class 1 is the critical class (true) of not (false)
-	 * @param printBoth Has no function other then differentiating the two methods for which an extra parameter is needed
+	 * @param p The probabilty class 2 has DLT of T.
 	 * @return The service level of the critical class
 	 */	
 	public static double getSimServiceLevelCritical(double L, double T, double rate1, double rate2, int S, int Sc, Random r, boolean case1, double p) {
@@ -127,9 +164,9 @@ public class Extension {
 		//The number of time units to simulate.
 		double timeHorizon = 1E+5; 
 		
-		//The there are high rates a smaller time horizon is considered, as more demand occurs in less time a shorter simulation suffices.
+		//If there are high rates, a smaller time horizon is considered, as more demand occurs in less time a shorter simulation suffices. Helps to improve run time.
 		if(rate1 > 10 && rate2 > 10 ) timeHorizon = timeHorizon/10;
-		if(Math.abs(L-T)<0.0005 ) T += 0.001;
+		if(Math.abs(L-T)<0.0005 ) T += 0.001; // This is done due to an error is L = T.
 
 		
 		//Initilization
@@ -156,7 +193,7 @@ public class Extension {
 		boolean reset = false; // A boolean to keep track of if we are in the start up phase
 		
 		while (t < timeHorizon){
-			//Reset the order count after a the start up fase
+			//Reset the order count after a the start up period
 			if (t> 100 && !reset) {
 				totCritical = 0;
 				filledCritical = 0;
@@ -165,6 +202,7 @@ public class Extension {
 				filledNonCritical = 0;
 				reset = true;
 			}
+			
 			//Get the next event
 			Entry<Double, Integer> event = events.pollFirstEntry();
 			//Set the clock to the time of the event
@@ -382,7 +420,7 @@ public class Extension {
 		//In this case the service levels of both classes are the same, so we can use the exact one which is fastest and exact. 
 		//Find the smallest S such that the service level requirements are met
 		for (int i= Extension.getSmin(L, T, rate1, rate2, Bc, Bn, p); i < 100; i++) {
-	
+			//Note the 0 in the parameters. This means that the S_c is restricted to 0, hence no rationing.
 			double sl =  Extension.getServiceLevelNonCritical(L, T, rate1, rate2, i, 0, p);
 			if (sl > Bc) return i;
 		}

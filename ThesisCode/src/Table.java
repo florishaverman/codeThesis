@@ -40,6 +40,8 @@ public class Table {
 		
 //		Random r =  new Random(9);
 		
+		/* This small bit of code was used to examine the probability of the service level being just over 99%, 
+		 * thus obtaining a different value then the replication paper.
 		Bc = 0.99;
 		Bn = 0.8;
 		rate1 = 1;
@@ -54,7 +56,7 @@ public class Table {
 //			Table.createLine45(L, T, rate1, 6, Bc, Bn, new Random(i), case1, true);
 		}
 		System.out.println("This is the counter " + counter);
-
+		*/
 
 		 endTime = System.currentTimeMillis();
 
